@@ -16,7 +16,7 @@ Svelte-Native works on top of NativeScript. To install NativeScript:
 $ npm install -g nativescript
 ```
 
-Check it worked by running `tns`
+Check it worked by running `ns`
 
 ![Success](/media/tns-success.png)
 
@@ -31,13 +31,13 @@ Svelte-Native really is native, so it needs a mobile device to run. The build se
 
 ## Create a new Svelte-Native app
 
-The easiest way to get started is to use the [latest template app](https://github.com/halfnelson/svelte-native-template)
+The easiest way to get started is to use the [latest template app](https://github.com/halfnelson/svelte-native-template):
 
 ```bash
-$ degit halfnelson/svelte-native-template myapp
+$ npx degit halfnelson/svelte-native-template myapp
 ```
 
-A fresh svelte-native app will be found in the `myapp` folder
+A fresh svelte-native app will be found in the `myapp` folder.
 
 ## Launch It
 
@@ -45,7 +45,7 @@ Launch your app with:
 
 ```bash
 $ cd myapp
-$ tns preview --bundle
+$ ns preview
 ```
 
 You will need to scan the ascii art QR code using the "Playground" app you installed previously.

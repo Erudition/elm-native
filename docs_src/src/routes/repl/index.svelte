@@ -46,11 +46,22 @@
 
 	onMount(() => {
 		if (version !== 'local') {
-			fetch(`https://unpkg.com/svelte@${version || 'beta'}/package.json`)
-				.then(r => r.json())
-				.then(pkg => {
-					version = pkg.version;
-				});
+			let svelteversion = Promise.resolve(version);
+			if (version == "latest") {
+				// get the latest supported svelte version
+				svelteversion = fetch('https://unpkg.com/svelte-native@latest/package.json')
+								.then(r => r.json())
+								.then(pkg => {
+									return pkg.peerDependencies.svelte;
+								});
+			}
+
+			svelteversion
+					.then(version => fetch(`https://unpkg.com/svelte@${version || 'beta'}/package.json`))
+					.then(r => r.json())
+					.then(pkg => {
+						version = pkg.version;
+					});
 		}
 
 		if (gist_id) {
@@ -129,7 +140,6 @@
 		overflow: hidden;
 		background-color: var(--back);
 		padding: var(--app-controls-h) 0 0 0;
-		margin: 0 calc(var(--side-nav) * -1);
 		box-sizing: border-box;
 	}
 
@@ -174,7 +184,7 @@
 
 
 <svelte:head>
-	<title>Svelte REPL</title>
+	<title>{name} • REPL • Svelte Native</title>
 </svelte:head>
 
 <div class="repl-outer {zen_mode ? 'zen-mode' : ''}">

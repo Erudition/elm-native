@@ -1,6 +1,6 @@
 import { ElementNode, logger as log } from '../basicdom'
-import { StyleScope } from 'tns-core-modules/ui/styling/style-scope'
-import { topmost, Frame } from 'tns-core-modules/ui/frame'
+import { StyleScope } from '@nativescript/core/ui/styling/style-scope'
+import { Frame } from '@nativescript/core'
 
 class StyleSheet {
 
@@ -13,14 +13,14 @@ class StyleSheet {
     deleteRule(index: number) {
         let removed = this._rules.splice(index, 1);
         for (let r in removed) {
-            log.debug(`removing transition rule ${r}`);
+            log.debug(() => `removing transition rule ${r}`);
             // Turns out nativescript doesn't support "removing" css.
             // this is pretty horrible but better than a memory leak. 
             // since this code is called mainly for keyframes, and keyframes don't add new selectors (they just end up in _keyframes)
             // we can almost remove the rules ourselves.
             if (r.startsWith('@keyframes')) {
                 const name = r.split(" ")[1];
-                let frame: Frame = topmost();
+                let frame: Frame = Frame.topmost();
                 if (frame && (frame as any)._styleScope) {
                     let scope = (frame as any)._styleScope as StyleScope;
                     delete scope._keyframes[name]
@@ -31,8 +31,8 @@ class StyleSheet {
     }
 
     insertRule(rule: string, index: number = 0) {
-        log.debug(`Adding transition rule ${rule}`);
-        let frame = topmost();
+        log.debug(() => `Adding transition rule ${rule}`);
+        let frame = Frame.topmost();
         frame.addCss(rule);
         this._rules.splice(index, 0, rule);
     }

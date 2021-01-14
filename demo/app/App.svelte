@@ -1,18 +1,48 @@
-<page class="page">
-    <actionBar title="My App" icon="" class="action-bar"></actionBar>
-    <stackLayout class="p-20">
-        <label text="Tap the button" class="h1 text-center" />
-        <button text="TAP" on:tap="{ onTap }" class="btn btn-primary btn-active" />
-        <label text="{ message }" class="h2 text-center" textWrap="true" />
-    </stackLayout>
-</page>
+<radSideDrawer bind:this={drawer}>
+    <radSideDrawer.drawerContent>
+        <gridLayout rows="auto, *" >
+            <label row="0" padding="10" class="h2" horizontalAlignment="left">Examples</label>
+            <label row="0" class="fas h2" text="&#xf00d;" padding="10" horizontalAlignment="right" on:tap={() => drawer.closeDrawer()} />
+            <scrollView row="1" >
+                <stackLayout>
+                    <label text="ListView" class:current={$current_page == ListViewPage} padding="10" on:tap="{() => gotoPage(ListViewPage)}" />
+                     <label text="Tabs" class:current={$current_page == TabsPage} padding="10" on:tap="{() => gotoPage(TabsPage)}" />
+                     <label text="Text Nodes" class:current={$current_page == TextNodePage} padding="10" on:tap="{() => gotoPage(TextNodePage)}" />
+                     <label text="SegmentedBar" class:current={$current_page == SegmentedBarPage} padding="10" on:tap="{() => gotoPage(SegmentedBarPage)}" />
+                     <label text="Formatted String" class:current={$current_page == FormattedStringPage} padding="10" on:tap="{() => gotoPage(FormattedStringPage)}" />
+                </stackLayout>
+            </scrollView>
+        </gridLayout>
+    </radSideDrawer.drawerContent>
+    <radSideDrawer.mainContent>
+        <frame id="navframe" defaultPage={ListViewPage}></frame>
+    </radSideDrawer.mainContent>
+</radSideDrawer>
 
 <script>
-    let counter = 42;
-    let message;
-    $: message = (counter <= 0)
-        ? "Hoorraaay! You unlocked the Svelte-Native clicker achievement!"
-        : `${counter} taps left`
+    import { onMount } from 'svelte'
+    import * as nav from './Nav'
+    import ListViewPage from './pages/ListViewPage.svelte'
+    import TabsPage from './pages/TabsPage.svelte'
+    import TextNodePage from './pages/TextNodePage.svelte'
+    import SegmentedBarPage from './pages/SegmentedBarPage.svelte'
+    import FormattedStringPage from './pages/FormattedStringPage.svelte'
 
-    const onTap = () => counter--;
+    function gotoPage(page) {
+        drawer.closeDrawer();
+        nav.goto(page);
+    }
+    
+    let drawer;
+    let current_page = nav.current_page
+
+    onMount(() => {
+        nav.init("navframe", drawer, ListViewPage)
+    })
 </script>
+
+<style>
+    .current {
+        font-weight: bold;
+    }
+</style>

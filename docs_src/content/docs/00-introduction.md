@@ -4,7 +4,7 @@ title: Introduction
 
 #### What is NativeScript?
 
- [NativeScript](https://www.nativescript.org/) is an open-source framework to develop apps on the Apple iOS and Android platforms. It is open source and can be found on [github](https://github.com/nativescript/nativescript)
+[NativeScript](https://www.nativescript.org/) is an open-source framework to develop apps on the Apple iOS and Android platforms. It is open source and can be found on [github](https://github.com/nativescript/nativescript).
 
 #### What is Svelte?
 
@@ -17,6 +17,5 @@ Instead of using techniques like virtual DOM diffing, Svelte writes code that su
 Svelte Native is a tool for building mobile applications. It combines NativeScript's access to the native platform views and Svelte's fast and efficient view updates to allow you to build native mobile experiences using tools such as HTML, CSS and Javascript.
 
 [Read the introductory blog post](/blog/svelte-goes-native).
-
 
 ![NativeScript + Svelte = Svelte Native](/logos_combined.svg)

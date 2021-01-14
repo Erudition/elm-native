@@ -1,8 +1,8 @@
 import { writable } from 'svelte/store';
 
 const PubnubKeys = {
-    PUBLISH_KEY: "pub-c-d7893276-cc78-4d18-8ab0-becba06e43de",
-    SUBSCRIBE_KEY: "sub-c-3dad1ebe-aaa3-11e8-8027-363023237e0b"
+    PUBLISH_KEY: "pub-c-b5343165-e988-4a8d-b415-6166eda14a91",
+    SUBSCRIBE_KEY: "sub-c-459b84a2-dcdf-11e9-9067-a65ad2c362ff"
 }
 
 
@@ -99,7 +99,8 @@ export class PreviewService {
                 file: "app.css",
                 binary: false,
                 fileContents: `
-                    @import '~nativescript-theme-core/css/core.light.css';
+@import "~nativescript-theme-core/css/core.css";
+@import "~nativescript-theme-core/css/blue.css";
                 `
             },
             {
@@ -107,14 +108,14 @@ export class PreviewService {
                 file: "main.js",
                 binary: false,
                 fileContents: `
-require('tns-core-modules/globals')
+require('@nativescript/core/globals')
 
 
 let app = global.loadModule('./app.js')
 
 global.__onLiveSyncCore = () => {
     console.log('reloading app');
-    var fs = require("tns-core-modules/file-system");
+    var fs = require("@nativescript/core/file-system");
     const applicationFiles = fs.knownFolders.currentApp();
     const appjs = applicationFiles.getFile('app.js').readTextSync();
     let refreshed_app = Function( "let exports={};" + appjs +";return exports")();

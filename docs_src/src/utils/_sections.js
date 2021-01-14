@@ -48,7 +48,7 @@ export default function (docs_path, anchor_base_url) {
 
 			renderer.code = (source, lang) => {
 				source = source.replace(/^ +/gm, match =>
-					match.split('    ').join('\t')
+					match.split('  ').join('\t')
 				);
 
 				const lines = source.split('\n');
@@ -112,7 +112,7 @@ export default function (docs_path, anchor_base_url) {
 
 					return `
 						<h${level}>
-							<span id="${slug}" class="offset-anchor"></span>
+							<span id="${slug}" class="offset-anchor" ${level > 4 ? 'data-scrollignore' : ''}></span>
 							<a href="${anchor_base_url}#${slug}" class="anchor" aria-hidden="true"></a>
 							${text}
 						</h${level}>`;

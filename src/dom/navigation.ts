@@ -1,8 +1,8 @@
-import { topmost, NavigationTransition, Frame, getFrameById, Page, BackstackEntry, ViewBase, NavigatedData } from "tns-core-modules/ui/frame";
+import { ViewBase, View, NavigatedData, NavigationTransition, Frame, BackstackEntry } from "@nativescript/core";
 import FrameElement from "./native/FrameElement";
 import { createElement, logger as log } from "./basicdom";
 import PageElement from "./native/PageElement";
-import NativeElementNode from "./native/NativeElementNode";
+import NativeViewElementNode from "./native/NativeViewElementNode";
 
 export type FrameSpec = Frame | FrameElement | string
 export type PageSpec = typeof SvelteComponent;
@@ -21,22 +21,22 @@ export interface NavigationOptions {
 
 function resolveFrame(frameSpec: FrameSpec): Frame {
     let targetFrame: Frame;
-    if (!frameSpec) targetFrame = topmost();
+    if (!frameSpec) targetFrame = Frame.topmost();
     if (frameSpec instanceof FrameElement) targetFrame = frameSpec.nativeView as Frame;
     if (frameSpec instanceof Frame) targetFrame = frameSpec;
     if (typeof frameSpec == "string") {
-        targetFrame = getFrameById(frameSpec)
-        if (!targetFrame) log.error(`Navigate could not find frame with id ${frameSpec}`)
+        targetFrame = Frame.getFrameById(frameSpec)
+        if (!targetFrame) log.error(() => `Navigate could not find frame with id ${frameSpec}`)
     }
     return targetFrame;
 }
 
-interface ComponentInstanceInfo { element: NativeElementNode, pageInstance: SvelteComponent }
+interface ComponentInstanceInfo { element: NativeViewElementNode<View>, pageInstance: SvelteComponent }
 
 function resolveComponentElement(pageSpec: PageSpec, props?: any): ComponentInstanceInfo {
     let dummy = createElement('fragment');
     let pageInstance = new pageSpec({ target: dummy, props: props });
-    let element = dummy.firstElement() as NativeElementNode;
+    let element = dummy.firstElement() as NativeViewElementNode<View>;
     return { element, pageInstance }
 }
 
@@ -102,7 +102,7 @@ export interface ShowModalOptions {
     ios?: { presentationStyle: any }
     animated?: boolean
     fullscreen?: boolean
-    stretched: boolean
+    stretched?: boolean
 }
 
 const modalStack: ComponentInstanceInfo[] = []
@@ -111,7 +111,7 @@ export function showModal<T>(modalOptions: ShowModalOptions): Promise<T> {
     let { page, props = {}, ...options } = modalOptions;
 
     //Get this before any potential new frames are created by component below
-    let modalLauncher = topmost().currentPage;
+    let modalLauncher = Frame.topmost().currentPage;
 
     let componentInstanceInfo = resolveComponentElement(page, props);
     let modalView: ViewBase = componentInstanceInfo.element.nativeView;

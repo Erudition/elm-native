@@ -1,10 +1,14 @@
 import { Template } from "svelte-native/components"
 import TemplateHarness from './TemplateHarness.svelte'
-import { createElement, NativeElementNode } from "svelte-native/dom";
+import { createElement } from "svelte-native/dom";
+import { Label } from "@nativescript/core/ui";
+import { NativeViewElementNode } from "svelte-native/dom";
 
 describe('Template', function () {
 
+
     it('can be instantiated', function () {
+        //this.enableTimeouts(false);
         let dummy = createElement('fragment');
         let c = new Template({ target: dummy });
         assert.isNotNull(c)
@@ -49,7 +53,7 @@ describe('Template', function () {
             });
 
             it('uses the provided props', function () {
-                let el = mount_point.firstElement() as NativeElementNode;
+                let el = mount_point.firstElement() as NativeViewElementNode<Label>;
                 assert.equal(el.getAttribute('text'), 'test text prop_value')
             });
 
@@ -60,8 +64,8 @@ describe('Template', function () {
                     props: { item: "prop_value2" }
                 })
 
-                let el1 = mount_point.firstElement() as NativeElementNode;
-                let el2 = mount_point2.firstElement() as NativeElementNode;
+                let el1 = mount_point.firstElement() as NativeViewElementNode<Label>;
+                let el2 = mount_point2.firstElement() as NativeViewElementNode<Label>;
                 assert.equal(el1.getAttribute('text'), 'test text prop_value')
                 assert.equal(el2.getAttribute('text'), 'test text prop_value2')
             })

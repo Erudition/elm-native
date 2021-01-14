@@ -1,29 +1,25 @@
 import { createElement, ViewNode, logger as log } from "../basicdom";
-import { Frame } from 'tns-core-modules/ui/frame'
-import NativeElementNode from "./NativeElementNode";
+import { Frame, View } from '@nativescript/core'
 import PageElement from "./PageElement";
-export default class FrameElement extends NativeElementNode {
+import NativeViewElementNode from "./NativeViewElementNode";
+
+export default class FrameElement extends NativeViewElementNode<Frame> {
 
     constructor() {
-        super('frame', Frame, null);
+        super('frame', Frame);
     }
 
     setAttribute(key: string, value: any) {
         if (key.toLowerCase() == "defaultpage") {
-            log.debug(`loading page ${value}`);
+            log.debug(() => `loading page ${value}`);
             let dummy = createElement('fragment');
             let page = new (value as any)({ target: dummy, props: {} });
-            (this.nativeView as Frame).navigate({ create: () => (dummy.firstElement() as NativeElementNode).nativeView });
+            (this.nativeView as Frame).navigate({ create: () => (dummy.firstElement() as NativeViewElementNode<View>).nativeView });
+            return;
         }
+        super.setAttribute(key, value);
     }
 
-    get nativeView(): Frame {
-        return super.nativeView as Frame
-    }
-
-    set nativeView(view: Frame) {
-        super.nativeView = view
-    }
 
     //In regular native script, Frame elements aren't meant to have children, we instead allow it to have one.. a page.. as a convenience
     // and set the instance as the default page by navigating to it.
@@ -32,6 +28,6 @@ export default class FrameElement extends NativeElementNode {
         if (!(childNode instanceof PageElement))
             return;
 
-        this.nativeView.navigate({ create: () => childNode.nativeView })
+        this.nativeView.navigate({ create: () => childNode.nativeView, clearHistory: true })
     }
 }
